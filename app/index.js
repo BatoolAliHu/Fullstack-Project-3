@@ -1,11 +1,25 @@
-//  استيراد المكتبات المطلوبة | import the required libraries
-//  تأكد من تنزيل الوحدات المطلوبة | make sure to download the required modules
+
+const express = require("express");
+const mongoose = require("mongoose");
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+
+mongoose.connect("mongodb://localhost/Batool" , {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true
+});
+
+mongoose.connection.once("open" , () => {
+    console.log("I love Batool 2.")
+})
+
+
+app.listen("3000" , () => {
+    console.log("I love Batool.");
+});
 
 
 
-
-
-
-
-
-// لا تنسى تحديد وظيفة الخادم | don't forget to define the server function that listens to requests

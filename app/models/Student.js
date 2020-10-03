@@ -1,15 +1,36 @@
-// في هذا الملف ، قم بإعداد وحدة المستخدم (الطالب) الخاصة بك | in this file, set up your user module
+const mongoose = require("mongoose");
+const {hash} = require("./utils/helper");
+const shortId = require("shortid");
 
-// 1. قم باستيراد مكتبة moongoose | import the mongoose library
+const StSchema = new mongoose.Schema({
+    name: {
+        type: String,
+    },
+    email: {
+        type: String,
+        unique: true
+    },
+    city: {
+        type: String,
 
-// 2. قم بتحديد مخطط الطالب | start defining your user schema
+    },
+    birthdate: {
+        type: String
+    },
+    secret: {
+        type: String
+    },
+    password: {
+        type: String
+    },
+});
 
+StSchema.pre("save" , async () => {
+    const student = this;
+    student.secret = shortId.generate();
+    student.password = await hash(student.password, student.secret);
+});
 
+const StudentModel = new mongoose.model("Students" , StSchema);
 
-
-
-// 3. إنشاء نموذج الطالب | create  the user model
-
-
-
-// 4. تصدير الوحدة | export the module
+module.exports = StudentModel;

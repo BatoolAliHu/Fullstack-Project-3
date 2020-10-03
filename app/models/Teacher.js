@@ -1,15 +1,33 @@
-// في هذا الملف ، قم بإعداد وحدة المستخدم (المدرس) الخاصة بك | in this file, set up your user module
+const mongoose = require("mongoose");
+const {hash} = require("./utils/helper");
+const shortId = require("shortid");
 
-// 1. قم باستيراد مكتبة moongoose | import the mongoose library
+const TSchema = new mongoose.Schema({
+    name: {
+        type: String
+    },
+    email: {
+        type: String,
+        unique: true
+    },
+    password: {
+        type: String
+    },
+    birthdate: {
+        type: String
+    },
+    secret: {
+        type: String
+    }
 
-// 2. قم بتحديد مخطط المدرس | start defining your user schema
+});
 
 
+TSchema.pre("save" , async () => {
+    const teacher = this;
+    teacher.secret = shortId.generate();
+    teacher.password = await hash(teacher.password, teacher.secret);
+});
 
-
-
-// 3. إنشاء نموذج المدرس | create  the user model
-
-// تخزين كلمة السر بعد عمل الهاش
-
-// 4. تصدير الوحدة | export the module
+const TeacherModel = new mongoose.model("Teachers" , TSchema);
+module.exports = TeacherModel;
