@@ -1,7 +1,7 @@
-const {hash} = require("./utils/helper");
+const {hash} = require("../utils/helper");
 const Joi = require("@hapi/joi");
 const jwt = require("jsonwebtoken");
-const StudentModel = require("./models/Student");
+const StudentModel = require("../models/Student");
 const express = require("express");
 const Router = express.Router();
 
@@ -54,7 +54,37 @@ Router.post("/login" , async (req , res) => {
 Router.put("/:id" , async (req , res) => {
     const {id} = req.params;
     const Student = await StudentModel.findOne({_id: id});
-    if(!Student){}
+    if(!Student){
+        return res.status(404).send({error : "No user found"});
+    }
+
+    const NewBody = Joi.object({
+        name: Joi.string(),
+        city: Joi.string(),
+        birthdate: Joi.string(),
+    });
+    const validate = NewBody.validate(req.body);
+    if(validate.error){
+        return res.status(400).send(validate.error.details);
+    }
+    const {name , city , birthdate} = req.body;
+    if(name){
+        Student.name = name;
+    }
+    if(city){
+        Student.city = city; 
+    }
+    if(birthdate){
+        Student.birthdate = birthdate;
+    }
+    await Student.save()
+    return res.status(200).send({Student});
+})
+
+Router.delete("/:id" , async (req , res) => {
+    const {id} = req.params;
+    const Student = await StudentModel.deleteOne({_id: id});
+    return res.status(200).send({Student});
 })
 
 

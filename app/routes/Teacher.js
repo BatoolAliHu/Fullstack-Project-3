@@ -1,7 +1,7 @@
-const {hash} = require("./utils/helper");
+const {hash} = require("../utils/helper");
 const Joi = require("@hapi/joi");
 const jwt = require("jsonwebtoken");
-const TeacherModel = require("./models/Teacher");
+const TeacherModel = require("../models/Teacher");
 const express = require("express");
 const Router = express.Router();
 
@@ -40,3 +40,5 @@ Router.post("/login" , async (req , res) => {
         res.status(200).send({token});
     }
 })
+
+module.exports = Router;

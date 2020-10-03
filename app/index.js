@@ -13,12 +13,16 @@ mongoose.connect("mongodb://localhost/Batool" , {
 });
 
 mongoose.connection.once("open" , () => {
-    console.log("I love Batool 2.")
+    console.log("MongoDB Connected");
 })
 
+const Student = require("./routes/Student");
+const Teacher = require("./routes/Teacher")
+app.use("/student" , Student);
+app.use("/teacher" , Teacher);
 
 app.listen("3000" , () => {
-    console.log("I love Batool.");
+    console.log("Application listening on port 3000");
 });
 
 

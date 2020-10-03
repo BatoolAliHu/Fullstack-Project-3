@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const {hash} = require("./utils/helper");
+const {hash} = require("../utils/helper");
 const shortId = require("shortid");
 
 const TSchema = new mongoose.Schema({
